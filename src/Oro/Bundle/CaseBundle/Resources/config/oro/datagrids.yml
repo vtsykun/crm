@@ -170,6 +170,23 @@ datagrids:
                 link:         delete_link
     cases-grid:
         extends: base-case-grid
+        source:
+            query:
+                select:
+                    - contactRegion.name as contactRegionName
+                join:
+                    left:
+                        -
+                            join: relatedContact.addresses
+                            alias: contactAddress
+                            conditionType: WITH
+                            condition: "contactAddress.primary = true"
+                        -
+                            join: contactAddress.region
+                            alias: contactRegion
+        columns:
+            contactRegionName:
+                label: contactRegionName
         filters:
             columns:
                 relatedContact:
@@ -182,6 +199,10 @@ datagrids:
                     type: string
                     data_name: relatedAccountName
                     enabled: false
+                contactRegion:
+                    label: contactRegionName
+                    type: string
+                    data_name: contactRegionName
         options:
             entity_pagination: true
     account-cases-grid:
@@ -321,3 +342,4 @@ datagrids:
                         field_options:
                             class: OroCaseBundle:CasePriority
                             property: label
+
